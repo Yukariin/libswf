@@ -12,6 +12,7 @@
 #include "SwfCompression.h"
 #include "SHAPE.h"
 #include "SHAPERECORD.h"
+
 using namespace std;
 
 class DataStream {
