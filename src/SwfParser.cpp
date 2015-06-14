@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -31,7 +30,7 @@ void SwfParser::readFromFile(const char *fileName)
 		ifstream inputFile (fileName, ios::binary);
 
 		inputFile.seekg (0, inputFile.end);
-		int length = inputFile.tellg();
+		size_t length = (size_t) inputFile.tellg();
 		inputFile.seekg (0, inputFile.beg);
 
 		cout << length << endl;
