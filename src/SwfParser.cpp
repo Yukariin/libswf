@@ -71,7 +71,7 @@ void SwfParser::readFromRawData(uint8_t *data, size_t dataLength)
 	}
 	ds = new DataStream(body, sizeof(body));
 
-	swf->frameSize = ds->readRect();
+	swf->frameSize = RECT(ds);
 	ds->readUI8();  // Skip first byte of frameRate because this looks like big-endian instead little
 	swf->frameRate = ds->readUI8();
 	swf->frameCount = ds->readUI16();
@@ -85,7 +85,7 @@ Tag SwfParser::readTag() {
 	Tag ret = Tag();
 	uint16_t tagIdAndLength = ds->readUI16();
 	uint16_t tagId = tagIdAndLength >> 6;  // Upper 10 bits: tag ID
-	uint32_t tagLength = tagIdAndLength & 0x3F;
+	uint32_t tagLength = (uint32_t) tagIdAndLength & 0x3F;
 	if (ds->available() < tagLength)
 		return ret;
 

@@ -3,6 +3,8 @@
 #include <sstream>
 
 #include "DataStream.h"
+#include "EndShapeRecord.h"
+#include "StyleChangeRecord.h"
 
 DataStream::DataStream(DataStream *ds) {
 	DataStream(ds->data, ds->dataLength);
@@ -156,19 +158,6 @@ RGB DataStream::readRGB() {
 	return r;
 }
 
-RECT DataStream::readRect() {
-	RECT ret;
-	uint64_t nBits = readUB(5);
-	ret.nBits = nBits;
-	ret.Xmin = readSB(nBits);
-	ret.Xmax = readSB(nBits);
-	ret.Ymin = readSB(nBits);
-	ret.Ymax = readSB(nBits);
-	alignByte();
-
-	return ret;
-}
-
 LANGCODE DataStream::readLANGCODE() {
 	LANGCODE ret;
 	ret =  LANGCODE(readUI8());
@@ -188,12 +177,12 @@ SHAPE DataStream::readSHAPE()
 	SHAPE ret;
 	ret.numFillBits = (int) readUB(4);
 	ret.numLineBits = (int) readUB(4);
-	//ret.shapeRecords = ;
+	ret.shapeRecords = readSHAPERECORDS(ret.numFillBits, ret.numLineBits);
 
 	return ret;
 }
 
-SHAPERECORD DataStream::readSHAPERECORD()
+SHAPERECORD DataStream::readSHAPERECORD(int fillBits, int lineBits)
 {
 	SHAPERECORD ret;
 	int typeFlag = (int) readUB(1);
@@ -203,13 +192,69 @@ SHAPERECORD DataStream::readSHAPERECORD()
 		bool stateFillStyle1 = readUB(1) == 1;
 		bool stateFillStyle0 = readUB(1) == 1;
 		bool stateMoveTo = readUB(1) == 1;
-	} else {
+		if ((!stateNewStyles) && (!stateLineStyle) && (!stateFillStyle1) && (!stateFillStyle0) && (!stateMoveTo))
+			ret = EndShapeRecord();
+		else {
+			StyleChangeRecord scr;
+			scr.stateNewStyles = stateNewStyles;
+			scr.stateLineStyle = stateLineStyle;
+			scr.stateFillStyle1 = stateFillStyle1;
+			scr.stateFillStyle0 = stateFillStyle0;
+			scr.stateMoveTo = stateMoveTo;
+			if (stateMoveTo) {
+				scr.moveBits = (int) readUB(5);
+				scr.moveDeltaX = (int) readSB(scr.moveBits);
+				scr.moveDeltaY = (int) readSB(scr.moveBits);
+			}
+			if (stateFillStyle0) {
+				scr.fillStyle0 = (int) readUB(fillBits);
+			}
+			if (stateFillStyle1) {
+				scr.fillStyle1 = (int) readUB(fillBits);
+			}
+			if (stateLineStyle) {
+				scr.lineStyle = (int) readUB(lineBits);
+			}
+			if (stateNewStyles) {
+				//scr.fillStyles = readFILLSTYLEARRAY(shapeNum);
+				//scr.lineStyles = readLINESTYLEARRAY(shapeNum);
 
+				scr.numFillBits = (int) readUB(4);
+				scr.numLineBits = (int) readUB(4);
+			}
+			ret = scr;
+		}
+	} else {
+		int straightFlag = (int) readUB(1);
+		if (straightFlag == 1){
+
+		} else {
+
+		}
 	}
 
 	return ret;
 }
 
+vector<SHAPERECORD> DataStream::readSHAPERECORDS(int fillBits, int lineBits) {
+	vector<SHAPERECORD> ret;
+	SHAPERECORD rec;
+	do {
+		rec = readSHAPERECORD(fillBits, lineBits);
+		if (dynamic_cast<StyleChangeRecord*>(&rec) != NULL) {
+			/*
+			if (rec.stateNewStyles) {
+				fillBits = rec.numFillBits;
+				lineBits = rec.numLineBits;
+			}
+			 */
+		}
+		ret.push_back(rec);
+	} while (dynamic_cast<EndShapeRecord*>(&rec) == NULL);
+	alignByte();
+
+	return ret;
+}
 
 int DataStream::readBytes(uint8_t *bytes, long len) {
 	if (len <= 0)

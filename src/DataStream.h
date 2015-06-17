@@ -7,7 +7,6 @@
 #include <glob.h>
 
 #include "RGB.h"
-#include "RECT.h"
 #include "LANGCODE.h"
 #include "SwfCompression.h"
 #include "SHAPE.h"
@@ -37,11 +36,11 @@ public:
     string readString(long len);
 
 	RGB readRGB();
-	RECT readRect();
 	LANGCODE readLANGCODE();
 	SwfCompression readCompression();
 	SHAPE readSHAPE();
-	SHAPERECORD readSHAPERECORD();
+	SHAPERECORD readSHAPERECORD(int fillBits, int lineBits);
+	vector<SHAPERECORD> readSHAPERECORDS(int fillBits, int lineBits);
 
 	// Base read methods
 	int readBytes(uint8_t* bytes, long len);
