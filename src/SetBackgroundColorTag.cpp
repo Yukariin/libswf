@@ -9,5 +9,5 @@ SetBackgroundColorTag::SetBackgroundColorTag(DataStream *ds) {
 }
 
 void SetBackgroundColorTag::readData(DataStream *ds) {
-    backgroundColor = ds->readRGB();
+	backgroundColor = RGB(ds);
 }

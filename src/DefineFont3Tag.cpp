@@ -18,7 +18,6 @@ void DefineFont3Tag::readData(DataStream *ds) {
 	languageCode = ds->readLANGCODE();
 	uint8_t fontNameLen = ds->readUI8();
 	fontName = ds->readString(fontNameLen);
-	cout << fontName << endl;
 
 	uint16_t numGlyphs = ds->readUI16();
 	uint32_t offsetTable [numGlyphs];
@@ -59,7 +58,7 @@ void DefineFont3Tag::readData(DataStream *ds) {
 			fontAdvanceTable.push_back(ds->readSI16());
 		}
 		for (int i = 0; i < numGlyphs; i++) {
-			fontBoundsTable.push_back(ds->readRect());
+			fontBoundsTable.push_back(RECT(ds));
 		}
 		uint16_t kerningCount = ds->readUI16();
 		for (int i = 0; i < kerningCount; i++) {

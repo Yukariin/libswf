@@ -6,7 +6,6 @@
 #include <string>
 #include <glob.h>
 
-#include "RGB.h"
 #include "LANGCODE.h"
 #include "SwfCompression.h"
 #include "SHAPE.h"
@@ -35,7 +34,6 @@ public:
 	string readString();
     string readString(long len);
 
-	RGB readRGB();
 	LANGCODE readLANGCODE();
 	SwfCompression readCompression();
 	SHAPE readSHAPE();

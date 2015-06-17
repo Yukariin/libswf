@@ -15,3 +15,13 @@ RGB::RGB(RGB &r) {
 	green = r.green;
 	blue = r.blue;
 }
+
+RGB::RGB(DataStream *ds) {
+	readData(ds);
+}
+
+void RGB::readData(DataStream *ds) {
+	red = ds->readUI8();
+	green = ds->readUI8();
+	blue = ds->readUI8();
+}

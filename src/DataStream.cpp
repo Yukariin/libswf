@@ -29,16 +29,16 @@ uint8_t DataStream::readUI8() {
 }
 
 uint16_t DataStream::readUI16() {
-	return ((uint16_t)read() + ((uint16_t)read() << 8));
+	return ((uint16_t) read() + ((uint16_t) read() << 8));
 }
 
 uint32_t DataStream::readUI32() {
-	return ((uint32_t)read() + ((uint32_t)read() << 8) + ((uint32_t)read() << 16) + ((uint32_t)read() << 24));
+	return ((uint32_t) read() + ((uint32_t) read() << 8) + ((uint32_t) read() << 16) + ((uint32_t) read() << 24));
 }
 
 uint64_t DataStream::readUI64() {
-	return ((uint64_t)read() + ((uint64_t)read() << 8) + ((uint64_t)read() << 16) + ((uint64_t)read() << 24)
-			+ ((uint64_t)read() << 32)+ ((uint64_t)read() << 40) + ((uint64_t)read() << 48) + ((uint64_t)read() << 56));
+	return ((uint64_t) read() + ((uint64_t) read() << 8) + ((uint64_t) read() << 16) + ((uint64_t) read() << 24)
+			+ ((uint64_t) read() << 32)+ ((uint64_t) read() << 40) + ((uint64_t) read() << 48) + ((uint64_t) read() << 56));
 }
 
 int8_t DataStream::readSI8() {
@@ -147,15 +147,6 @@ string DataStream::readString(long len) {
 	}
 
 	return ret.str();
-}
-
-RGB DataStream::readRGB() {
-	RGB r;
-	r.red = readUI8();
-	r.green = readUI8();
-	r.blue = readUI8();
-
-	return r;
 }
 
 LANGCODE DataStream::readLANGCODE() {
