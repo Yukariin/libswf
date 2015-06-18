@@ -17,3 +17,23 @@ void StraightEdgeRecord::readData(DataStream *ds) {
 		deltaY = (int) ds->readSB(numBits + 2);
 	}
 }
+
+int StraightEdgeRecord::changeX(int x) {
+	if (generalLineFlag) {
+		return x + deltaX;
+	} else if (vertLineFlag) {
+		return x;
+	} else {
+		return x + deltaX;
+	}
+}
+
+int StraightEdgeRecord::changeY(int y) {
+	if (generalLineFlag) {
+		return y + deltaY;
+	} else if (vertLineFlag) {
+		return y + deltaY;
+	} else {
+		return y;
+	}
+}

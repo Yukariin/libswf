@@ -17,6 +17,8 @@ public:
 	CurvedEdgeRecord(DataStream* ds);
 
 	void readData(DataStream* ds);
+	int changeX(int x);
+	int changeY(int y);
 };
 
 

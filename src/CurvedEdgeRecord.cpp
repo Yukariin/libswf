@@ -11,3 +11,11 @@ void CurvedEdgeRecord::readData(DataStream *ds) {
 	anchorDeltaX = (int) ds->readSB(numBits + 2);
 	anchorDeltaY = (int) ds->readSB(numBits + 2);
 }
+
+int CurvedEdgeRecord::changeX(int x) {
+	return x + (controlDeltaX + anchorDeltaX);
+}
+
+int CurvedEdgeRecord::changeY(int y) {
+	return y + (controlDeltaY + anchorDeltaY);
+}

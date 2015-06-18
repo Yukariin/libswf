@@ -6,6 +6,7 @@
 
 class StyleChangeRecord : public SHAPERECORD {
 public:
+	static const bool typeFlag = false;
 	bool stateNewStyles;
 	bool stateLineStyle;
 	bool stateFillStyle1;
@@ -21,6 +22,9 @@ public:
 	//LINESTYLEARRAY lineStyles;
 	int numFillBits;
 	int numLineBits;
+
+	int changeX(int x);
+	int changeY(int y);
 };
 
 
