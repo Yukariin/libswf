@@ -5,6 +5,8 @@
 #include "DataStream.h"
 #include "EndShapeRecord.h"
 #include "StyleChangeRecord.h"
+#include "StraightEdgeRecord.h"
+#include "CurvedEdgeRecord.h"
 
 DataStream::DataStream(DataStream *ds) {
 	DataStream(ds->data, ds->dataLength);
@@ -218,9 +220,9 @@ SHAPERECORD DataStream::readSHAPERECORD(int fillBits, int lineBits)
 	} else {
 		int straightFlag = (int) readUB(1);
 		if (straightFlag == 1){
-
+			ret = StraightEdgeRecord(this);
 		} else {
-
+			ret = CurvedEdgeRecord(this);
 		}
 	}
 
@@ -280,9 +282,8 @@ long DataStream::available() {
 }
 
 void DataStream::skipBytes(long count) {
-	if (count <= 0) {
+	if (count <= 0)
 		return;
-	}
 
 	bitIndex = 0;
 	index += count;
@@ -295,5 +296,8 @@ long DataStream::getIndex() {
 }
 
 void DataStream::seek(long index) {
+	if (index <= 0)
+		return;
+
 	this->index = index;
 }
