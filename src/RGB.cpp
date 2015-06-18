@@ -10,10 +10,10 @@ RGB::RGB(uint8_t red, uint8_t green, uint8_t blue) {
 	this->blue = blue;
 }
 
-RGB::RGB(RGB &r) {
-	red = r.red;
-	green = r.green;
-	blue = r.blue;
+RGB::RGB(RGB *r) {
+	red = r->red;
+	green = r->green;
+	blue = r->blue;
 }
 
 RGB::RGB(DataStream *ds) {

@@ -11,7 +11,7 @@ class SHAPE {
 public:
 	int numFillBits;
 	int numLineBits;
-	vector<SHAPERECORD> shapeRecords;
+	vector<SHAPERECORD*> shapeRecords;
 };
 
 

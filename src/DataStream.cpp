@@ -171,93 +171,63 @@ SHAPE DataStream::readSHAPE()
 	ret.numFillBits = (int) readUB(4);
 	ret.numLineBits = (int) readUB(4);
 	ret.shapeRecords = readSHAPERECORDS(ret.numFillBits, ret.numLineBits);
+	cout << ret.shapeRecords.size() << endl;
 
 	return ret;
 }
 
-SHAPERECORD DataStream::readSHAPERECORD(int fillBits, int lineBits)
+SHAPERECORD *DataStream::readSHAPERECORD(int fillBits, int lineBits)
 {
-	SHAPERECORD ret;
+	SHAPERECORD *ret;
 	int typeFlag = (int) readUB(1);
 	if(typeFlag == 0) {
-		bool stateNewStyles = readUB(1) == 1;
-		bool stateLineStyle = readUB(1) == 1;
-		bool stateFillStyle1 = readUB(1) == 1;
-		bool stateFillStyle0 = readUB(1) == 1;
-		bool stateMoveTo = readUB(1) == 1;
-		if ((!stateNewStyles) && (!stateLineStyle) && (!stateFillStyle1) && (!stateFillStyle0) && (!stateMoveTo))
-			ret = EndShapeRecord();
-		else {
-			StyleChangeRecord scr;
-			scr.stateNewStyles = stateNewStyles;
-			scr.stateLineStyle = stateLineStyle;
-			scr.stateFillStyle1 = stateFillStyle1;
-			scr.stateFillStyle0 = stateFillStyle0;
-			scr.stateMoveTo = stateMoveTo;
-			if (stateMoveTo) {
-				scr.moveBits = (int) readUB(5);
-				scr.moveDeltaX = (int) readSB(scr.moveBits);
-				scr.moveDeltaY = (int) readSB(scr.moveBits);
-			}
-			if (stateFillStyle0) {
-				scr.fillStyle0 = (int) readUB(fillBits);
-			}
-			if (stateFillStyle1) {
-				scr.fillStyle1 = (int) readUB(fillBits);
-			}
-			if (stateLineStyle) {
-				scr.lineStyle = (int) readUB(lineBits);
-			}
-			if (stateNewStyles) {
-				//scr.fillStyles = readFILLSTYLEARRAY(shapeNum);
-				//scr.lineStyles = readLINESTYLEARRAY(shapeNum);
-
-				scr.numFillBits = (int) readUB(4);
-				scr.numLineBits = (int) readUB(4);
-			}
+		StyleChangeRecord *scr = new StyleChangeRecord(this, fillBits, lineBits);
+		if ((!scr->stateNewStyles) && (!scr->stateLineStyle) && (!scr->stateFillStyle1) && (!scr->stateFillStyle0) && (!scr->stateMoveTo))
+			ret = new EndShapeRecord();
+		else
 			ret = scr;
-		}
 	} else {
 		int straightFlag = (int) readUB(1);
 		if (straightFlag == 1){
-			ret = StraightEdgeRecord(this);
+			ret = new StraightEdgeRecord(this);
 		} else {
-			ret = CurvedEdgeRecord(this);
+			ret = new CurvedEdgeRecord(this);
 		}
 	}
 
 	return ret;
 }
 
-vector<SHAPERECORD> DataStream::readSHAPERECORDS(int fillBits, int lineBits) {
-	vector<SHAPERECORD> ret;
-	SHAPERECORD rec;
+vector<SHAPERECORD*> DataStream::readSHAPERECORDS(int fillBits, int lineBits) {
+	vector<SHAPERECORD*> ret;
+	SHAPERECORD *rec;
 	do {
 		rec = readSHAPERECORD(fillBits, lineBits);
-		if (dynamic_cast<StyleChangeRecord*>(&rec) != NULL) {
-			/*
-			if (rec.stateNewStyles) {
-				fillBits = rec.numFillBits;
-				lineBits = rec.numLineBits;
+		if (dynamic_cast<StyleChangeRecord*>(rec)) {
+			cout << "StyleChangeRecord here" << endl;
+			StyleChangeRecord scRec = dynamic_cast<StyleChangeRecord&>(*rec);
+			if (scRec.stateNewStyles) {
+				fillBits = scRec.numFillBits;
+				lineBits = scRec.numLineBits;
 			}
-			 */
 		}
 		ret.push_back(rec);
-	} while (dynamic_cast<EndShapeRecord*>(&rec) == NULL);
+	} while (!dynamic_cast<EndShapeRecord*>(rec));
 	alignByte();
 
 	return ret;
 }
 
-int DataStream::readBytes(uint8_t *bytes, long len) {
+uint8_t* DataStream::readBytes(long len) {
 	if (len <= 0)
 		return 0;
 
+	uint8_t *ret = new uint8_t [len];
 	bitIndex = 0;
-	copy(data + index, data + index + len, bytes);
+	copy(data + index, data + index + len, ret);
 	index += len;
 
-	return (int)len;
+	return ret;
 }
 
 uint8_t DataStream::read() {

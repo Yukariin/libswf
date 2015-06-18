@@ -81,8 +81,8 @@ void SwfParser::readFromRawData(uint8_t *data, size_t dataLength)
 
 
 
-Tag SwfParser::readTag() {
-	Tag ret = Tag();
+Tag* SwfParser::readTag() {
+	Tag *ret = new Tag();
 	uint16_t tagIdAndLength = ds->readUI16();
 	uint16_t tagId = tagIdAndLength >> 6;  // Upper 10 bits: tag ID
 	uint32_t tagLength = (uint32_t) tagIdAndLength & 0x3F;
@@ -99,15 +99,15 @@ Tag SwfParser::readTag() {
 	cout << "Tag length is: " << (int)tagLength << endl;
 
 	if (tagId == 0)
-		ret = EndTag(ds);
+		ret = new EndTag(ds);
 	else if (tagId == 9)
-		ret = SetBackgroundColorTag(ds);
+		ret = new SetBackgroundColorTag(ds);
 	else if (tagId == 69)
-		ret = FileAttributesTag(ds);
+		ret = new FileAttributesTag(ds);
 	else if (tagId == 75)
-		ret = DefineFont3Tag(ds);
+		ret = new DefineFont3Tag(ds);
 	else if (tagId == 86)
-		ret = DefineSceneAndFrameLabelDataTag(ds);
+		ret = new DefineSceneAndFrameLabelDataTag(ds);
 	else
 		ds->skipBytes(tagLength);
 
@@ -115,12 +115,11 @@ Tag SwfParser::readTag() {
 }
 
 void SwfParser::readTagList() {
-	vector<Tag> tagList;
-	while (ds->available() > 0) {
-		Tag t = readTag();
-		if (t.id)
+	vector<Tag*> tagList;
+	Tag *t;
+	do {
+		t = readTag();
+		if (t->id)
 			tagList.insert(tagList.end(), t);
-		if (t.id == 0)
-			break;
-	}
+	} while (!dynamic_cast<EndTag*>(t) && ds->available() > 0);
 }

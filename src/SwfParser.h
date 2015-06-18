@@ -15,18 +15,18 @@ using namespace std;
 
 class SwfParser {
 public:
-    SwfParser();
-    SwfParser(Swf* swf);
-    ~SwfParser();
+	SwfParser();
+	SwfParser(Swf* swf);
+	~SwfParser();
 
-    void readFromFile(const char* fileName);
-    void readFromRawData(uint8_t* data, size_t dataLength);
-    Tag readTag();
-    void readTagList();
+	void readFromFile(const char* fileName);
+	void readFromRawData(uint8_t* data, size_t dataLength);
+	Tag* readTag();
+	void readTagList();
 
 private:
-    Swf *swf;
-    DataStream *ds;
+	Swf *swf;
+	DataStream *ds;
 };
 
 

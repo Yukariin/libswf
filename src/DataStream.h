@@ -37,11 +37,11 @@ public:
 	LANGCODE readLANGCODE();
 	SwfCompression readCompression();
 	SHAPE readSHAPE();
-	SHAPERECORD readSHAPERECORD(int fillBits, int lineBits);
-	vector<SHAPERECORD> readSHAPERECORDS(int fillBits, int lineBits);
+	SHAPERECORD* readSHAPERECORD(int fillBits, int lineBits);
+	vector<SHAPERECORD*> readSHAPERECORDS(int fillBits, int lineBits);
 
 	// Base read methods
-	int readBytes(uint8_t* bytes, long len);
+	uint8_t* readBytes(long len);
 	void alignByte();
 	long available();
 	uint8_t read();
