@@ -203,12 +203,10 @@ vector<SHAPERECORD*> DataStream::readSHAPERECORDS(int fillBits, int lineBits) {
 	SHAPERECORD *rec;
 	do {
 		rec = readSHAPERECORD(fillBits, lineBits);
-		if (dynamic_cast<StyleChangeRecord*>(rec)) {
-			cout << "StyleChangeRecord here" << endl;
-			StyleChangeRecord scRec = dynamic_cast<StyleChangeRecord&>(*rec);
-			if (scRec.stateNewStyles) {
-				fillBits = scRec.numFillBits;
-				lineBits = scRec.numLineBits;
+		if (StyleChangeRecord *scRec = dynamic_cast<StyleChangeRecord*>(rec)) {
+			if (scRec->stateNewStyles) {
+				fillBits = scRec->numFillBits;
+				lineBits = scRec->numLineBits;
 			}
 		}
 		ret.push_back(rec);
