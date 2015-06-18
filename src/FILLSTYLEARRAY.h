@@ -4,9 +4,16 @@
 
 #include <vector>
 
+#include "FILLSTYLE.h"
+
 class FILLSTYLEARRAY {
 public:
-	vector<int> fillStyles;
+	std::vector<FILLSTYLE> fillStyles;
+
+	FILLSTYLEARRAY();
+	FILLSTYLEARRAY(DataStream* ds);
+
+	void readData(DataStream* ds);
 };
 
 
