@@ -6,6 +6,7 @@
 
 #include "RGB.h"
 #include "MATRIX.h"
+#include "GRADIENT.h"
 
 class FILLSTYLE {
 public:
@@ -23,7 +24,7 @@ public:
 	bool inShape3;
 	RGB color;
 	MATRIX gradientMatrix;
-	int gradient;
+	GRADIENT gradient;
 	int bitmapId;
 	MATRIX bitmapMatrix;
 

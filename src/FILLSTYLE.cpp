@@ -10,11 +10,7 @@ FILLSTYLE::FILLSTYLE(DataStream *ds) {
 void FILLSTYLE::readData(DataStream *ds) {
 	fillStyleType = ds->readUI8();
 	if (fillStyleType == fillStyleTypes::SOLID) {
-		if (shapeNum >= 3) {
-			color = readRGBA();
-		} else {
-			color = RGB(ds);
-		}
+		color = RGB(ds);
 	}
 	if ((fillStyleType ==fillStyleTypes::LINEAR_GRADIENT)
 		|| (fillStyleType ==fillStyleTypes::RADIAL_GRADIENT)
@@ -23,10 +19,10 @@ void FILLSTYLE::readData(DataStream *ds) {
 	}
 	if ((fillStyleType ==fillStyleTypes::LINEAR_GRADIENT)
 		|| (fillStyleType ==fillStyleTypes::RADIAL_GRADIENT)) {
-		gradient = readGRADIENT(shapeNum);
+		gradient = GRADIENT(ds);
 	}
 	if (fillStyleType ==fillStyleTypes::FOCAL_RADIAL_GRADIENT) {
-		gradient = readFOCALGRADIENT(shapeNum);
+		//gradient = readFOCALGRADIENT(shapeNum);
 	}
 
 	if ((fillStyleType ==fillStyleTypes::REPEATING_BITMAP)
