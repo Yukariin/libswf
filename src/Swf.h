@@ -1,7 +1,3 @@
-//
-// Created by yukarin on 5/9/15.
-//
-
 #ifndef LIBSWF_SWF_H
 #define LIBSWF_SWF_H
 
