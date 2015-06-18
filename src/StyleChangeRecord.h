@@ -3,6 +3,7 @@
 
 
 #include "SHAPERECORD.h"
+#include "FILLSTYLEARRAY.h"
 
 class StyleChangeRecord : public SHAPERECORD {
 public:
@@ -18,13 +19,17 @@ public:
 	int fillStyle0;
 	int fillStyle1;
 	int lineStyle;
-	//FILLSTYLEARRAY fillStyles;
+	FILLSTYLEARRAY fillStyles;
 	//LINESTYLEARRAY lineStyles;
 	int numFillBits;
 	int numLineBits;
 
 	int changeX(int x);
 	int changeY(int y);
+
+	StyleChangeRecord(DataStream* ds, int fillBits, int lineBits);
+
+	void readData(DataStream* ds, int fillBits, int lineBits);
 };
 
 
