@@ -32,13 +32,15 @@ public:
 	int64_t readSB(unsigned nBits);
 	uint32_t readEncodedU32();
 	string readString();
-    string readString(long len);
+	string readString(long len);
+	float readFIXED();
 
 	LANGCODE readLANGCODE();
 	SwfCompression readCompression();
-	SHAPE readSHAPE();
-	SHAPERECORD* readSHAPERECORD(int fillBits, int lineBits);
-	vector<SHAPERECORD*> readSHAPERECORDS(int fillBits, int lineBits);
+
+	SHAPE readSHAPE(int shapeNum);
+	SHAPERECORD* readSHAPERECORD(int fillBits, int lineBits, int shapeNum);
+	vector<SHAPERECORD*> readSHAPERECORDS(int fillBits, int lineBits, int shapeNum);
 
 	// Base read methods
 	uint8_t* readBytes(long len);

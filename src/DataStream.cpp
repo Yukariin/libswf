@@ -151,6 +151,13 @@ string DataStream::readString(long len) {
 	return ret.str();
 }
 
+float DataStream::readFIXED() {
+	int afterPoint = read();
+	int beforePoint = read();
+	float ret = beforePoint + (((float) afterPoint) / 256);
+	return ret;
+}
+
 LANGCODE DataStream::readLANGCODE() {
 	LANGCODE ret;
 	ret =  LANGCODE(readUI8());
@@ -165,23 +172,23 @@ SwfCompression DataStream::readCompression() {
 	return ret;
 }
 
-SHAPE DataStream::readSHAPE()
+SHAPE DataStream::readSHAPE(int shapeNum)
 {
 	SHAPE ret;
 	ret.numFillBits = (int) readUB(4);
 	ret.numLineBits = (int) readUB(4);
-	ret.shapeRecords = readSHAPERECORDS(ret.numFillBits, ret.numLineBits);
+	ret.shapeRecords = readSHAPERECORDS(ret.numFillBits, ret.numLineBits, shapeNum);
 	cout << ret.shapeRecords.size() << endl;
 
 	return ret;
 }
 
-SHAPERECORD *DataStream::readSHAPERECORD(int fillBits, int lineBits)
+SHAPERECORD *DataStream::readSHAPERECORD(int fillBits, int lineBits, int shapeNum)
 {
 	SHAPERECORD *ret;
 	int typeFlag = (int) readUB(1);
 	if(typeFlag == 0) {
-		StyleChangeRecord *scr = new StyleChangeRecord(this, fillBits, lineBits);
+		StyleChangeRecord *scr = new StyleChangeRecord(this, fillBits, lineBits, shapeNum);
 		if ((!scr->stateNewStyles) && (!scr->stateLineStyle) && (!scr->stateFillStyle1) && (!scr->stateFillStyle0) && (!scr->stateMoveTo))
 			ret = new EndShapeRecord();
 		else
@@ -198,11 +205,11 @@ SHAPERECORD *DataStream::readSHAPERECORD(int fillBits, int lineBits)
 	return ret;
 }
 
-vector<SHAPERECORD*> DataStream::readSHAPERECORDS(int fillBits, int lineBits) {
+vector<SHAPERECORD*> DataStream::readSHAPERECORDS(int fillBits, int lineBits, int shapeNum) {
 	vector<SHAPERECORD*> ret;
 	SHAPERECORD *rec;
 	do {
-		rec = readSHAPERECORD(fillBits, lineBits);
+		rec = readSHAPERECORD(fillBits, lineBits, shapeNum);
 		if (StyleChangeRecord *scRec = dynamic_cast<StyleChangeRecord*>(rec)) {
 			if (scRec->stateNewStyles) {
 				fillBits = scRec->numFillBits;
