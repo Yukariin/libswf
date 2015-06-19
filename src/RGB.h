@@ -16,7 +16,7 @@ public:
 	RGB(RGB* r);
 	RGB(DataStream* ds);
 
-	void readData(DataStream* ds);
+	virtual void readData(DataStream* ds);
 };
 
 
