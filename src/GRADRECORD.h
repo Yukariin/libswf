@@ -12,9 +12,9 @@ public:
 	RGB color;
 
 	GRADRECORD();
-	GRADRECORD(DataStream* ds);
+	GRADRECORD(DataStream* ds, int shapeNum);
 
-	void readData(DataStream* ds);
+	void readData(DataStream* ds, int shapeNum);
 };
 
 

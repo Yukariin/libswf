@@ -28,9 +28,9 @@ public:
 	std::vector<GRADRECORD> gradientRecords;
 
 	GRADIENT();
-	GRADIENT(DataStream* ds);
+	GRADIENT(DataStream* ds, int shapeNum);
 
-	void readData(DataStream* ds);
+	virtual void readData(DataStream* ds, int shapeNum);
 };
 
 

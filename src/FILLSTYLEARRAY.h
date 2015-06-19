@@ -11,9 +11,9 @@ public:
 	std::vector<FILLSTYLE> fillStyles;
 
 	FILLSTYLEARRAY();
-	FILLSTYLEARRAY(DataStream* ds);
+	FILLSTYLEARRAY(DataStream* ds, int shapeNum);
 
-	void readData(DataStream* ds);
+	void readData(DataStream* ds, int shapeNum);
 };
 
 

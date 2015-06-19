@@ -29,9 +29,9 @@ public:
 	MATRIX bitmapMatrix;
 
 	FILLSTYLE();
-	FILLSTYLE(DataStream* ds);
+	FILLSTYLE(DataStream* ds, int shapeNum);
 
-	void readData(DataStream* ds);
+	void readData(DataStream* ds, int shapeNum);
 };
 
 

@@ -39,7 +39,7 @@ void DefineFont3Tag::readData(DataStream *ds) {
 
 	for (int i = 0; i < numGlyphs; i++) {
 		ds->seek(index + offsetTable[i]);
-		glyphShapeTable.push_back(ds->readSHAPE());
+		glyphShapeTable.push_back(ds->readSHAPE(1));
 	}
 
 	for (int i = 0; i < numGlyphs; i++) {
