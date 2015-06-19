@@ -10,6 +10,7 @@
 #include "DefineFont3Tag.h"
 #include "EndTag.h"
 #include "DefineFontNameTag.h"
+#include "DoABCDefineTag.h"
 
 
 SwfParser::SwfParser() {
@@ -107,6 +108,8 @@ Tag* SwfParser::readTag() {
 		ret = new FileAttributesTag(ds);
 	else if (tagId == 75)
 		ret = new DefineFont3Tag(ds);
+	else if (tagId == 82)
+		ret = new DoABCDefineTag(ds);
 	else if (tagId == 86)
 		ret = new DefineSceneAndFrameLabelDataTag(ds);
 	else if (tagId == 88)
