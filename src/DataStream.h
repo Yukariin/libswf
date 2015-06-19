@@ -5,10 +5,10 @@
 #include <stdint.h>
 #include <string>
 #include <glob.h>
+#include <vector>
 
 #include "LANGCODE.h"
 #include "SwfCompression.h"
-#include "SHAPE.h"
 #include "SHAPERECORD.h"
 
 using namespace std;
@@ -38,7 +38,6 @@ public:
 	LANGCODE readLANGCODE();
 	SwfCompression readCompression();
 
-	SHAPE readSHAPE(int shapeNum);
 	SHAPERECORD* readSHAPERECORD(int fillBits, int lineBits, int shapeNum);
 	vector<SHAPERECORD*> readSHAPERECORDS(int fillBits, int lineBits, int shapeNum);
 

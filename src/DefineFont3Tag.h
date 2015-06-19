@@ -35,6 +35,7 @@ public:
 	vector<KERNINGRECORD> fontKerningTable;
 
 	DefineFont3Tag(DataStream* ds);
+
 	void readData(DataStream* ds);
 };
 

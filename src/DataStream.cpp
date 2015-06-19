@@ -172,17 +172,6 @@ SwfCompression DataStream::readCompression() {
 	return ret;
 }
 
-SHAPE DataStream::readSHAPE(int shapeNum)
-{
-	SHAPE ret;
-	ret.numFillBits = (int) readUB(4);
-	ret.numLineBits = (int) readUB(4);
-	ret.shapeRecords = readSHAPERECORDS(ret.numFillBits, ret.numLineBits, shapeNum);
-	cout << ret.shapeRecords.size() << endl;
-
-	return ret;
-}
-
 SHAPERECORD *DataStream::readSHAPERECORD(int fillBits, int lineBits, int shapeNum)
 {
 	SHAPERECORD *ret;
