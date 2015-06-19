@@ -29,17 +29,16 @@ void DefineFont3Tag::readData(DataStream *ds) {
 			offsetTable[i] = ds->readUI16();
 	}
 
-	uint32_t codeTableOffset;
 	if (numGlyphs > 0) {
 		if (fontFlagsWideOffsets)
-			codeTableOffset = ds->readUI32(); //codeTableOffset
+			ds->readUI32(); //codeTableOffset
 		else
-			codeTableOffset = ds->readUI16(); //codeTableOffset
+			ds->readUI16(); //codeTableOffset
 	}
 
 	for (int i = 0; i < numGlyphs; i++) {
 		ds->seek(index + offsetTable[i]);
-		glyphShapeTable.push_back(ds->readSHAPE(1));
+		glyphShapeTable.push_back(SHAPE(ds, 1));
 	}
 
 	for (int i = 0; i < numGlyphs; i++) {
@@ -62,7 +61,7 @@ void DefineFont3Tag::readData(DataStream *ds) {
 		}
 		uint16_t kerningCount = ds->readUI16();
 		for (int i = 0; i < kerningCount; i++) {
-			//fontKerningTable.push_back();
+			fontKerningTable.push_back(KERNINGRECORD(ds, fontFlagsWideCodes));
 		}
 	}
 }

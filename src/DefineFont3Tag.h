@@ -8,6 +8,7 @@
 #include "LANGCODE.h"
 #include "SHAPE.h"
 #include "RECT.h"
+#include "KERNINGRECORD.h"
 
 class DefineFont3Tag : public Tag {
 public:
@@ -31,7 +32,7 @@ public:
 	int16_t fontLeading;
 	vector<int16_t> fontAdvanceTable;
 	vector<RECT> fontBoundsTable;
-	vector<int16_t> fontKerningTable;
+	vector<KERNINGRECORD> fontKerningTable;
 
 	DefineFont3Tag(DataStream* ds);
 	void readData(DataStream* ds);
