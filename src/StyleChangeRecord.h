@@ -27,9 +27,9 @@ public:
 	int changeX(int x);
 	int changeY(int y);
 
-	StyleChangeRecord(DataStream* ds, int fillBits, int lineBits);
+	StyleChangeRecord(DataStream* ds, int fillBits, int lineBits, int shapeNum);
 
-	void readData(DataStream* ds, int fillBits, int lineBits);
+	void readData(DataStream* ds, int fillBits, int lineBits, int shapeNum);
 };
 
 

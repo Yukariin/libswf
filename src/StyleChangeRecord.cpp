@@ -14,11 +14,11 @@ int StyleChangeRecord::changeY(int y) {
 	return y;
 }
 
-StyleChangeRecord::StyleChangeRecord(DataStream *ds, int fillBits, int lineBits) {
-	readData(ds, fillBits, lineBits);
+StyleChangeRecord::StyleChangeRecord(DataStream *ds, int fillBits, int lineBits, int shapeNum) {
+	readData(ds, fillBits, lineBits, shapeNum);
 }
 
-void StyleChangeRecord::readData(DataStream *ds, int fillBits, int lineBits) {
+void StyleChangeRecord::readData(DataStream *ds, int fillBits, int lineBits, int shapeNum) {
 	stateNewStyles = ds->readUB(1) == 1;
 	stateLineStyle = ds->readUB(1) == 1;
 	stateFillStyle1 = ds->readUB(1) == 1;
@@ -41,8 +41,8 @@ void StyleChangeRecord::readData(DataStream *ds, int fillBits, int lineBits) {
 		lineStyle = (int) ds->readUB(lineBits);
 	}
 	if (stateNewStyles) {
-		fillStyles = FILLSTYLEARRAY(ds);
-		//lineStyles = ds->readLINESTYLEARRAY(shapeNum);
+		fillStyles = FILLSTYLEARRAY(ds, shapeNum);
+		//lineStyles = ds->readLINESTYLEARRAY(ds, shapeNum);
 
 		numFillBits = (int) ds->readUB(4);
 		numLineBits = (int) ds->readUB(4);
