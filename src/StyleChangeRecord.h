@@ -25,12 +25,11 @@ public:
 	int numFillBits;
 	int numLineBits;
 
-	int changeX(int x);
-	int changeY(int y);
-
 	StyleChangeRecord(DataStream* ds, int fillBits, int lineBits, int shapeNum);
 
 	void readData(DataStream* ds, int fillBits, int lineBits, int shapeNum);
+	int changeX(int x);
+	int changeY(int y);
 };
 
 

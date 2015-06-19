@@ -1,19 +1,5 @@
 #include "StyleChangeRecord.h"
 
-int StyleChangeRecord::changeX(int x) {
-	if (stateMoveTo) {
-		return moveDeltaX;
-	}
-	return x;
-}
-
-int StyleChangeRecord::changeY(int y) {
-	if (stateMoveTo) {
-		return moveDeltaY;
-	}
-	return y;
-}
-
 StyleChangeRecord::StyleChangeRecord(DataStream *ds, int fillBits, int lineBits, int shapeNum) {
 	readData(ds, fillBits, lineBits, shapeNum);
 }
@@ -47,4 +33,18 @@ void StyleChangeRecord::readData(DataStream *ds, int fillBits, int lineBits, int
 		numFillBits = (int) ds->readUB(4);
 		numLineBits = (int) ds->readUB(4);
 	}
+}
+
+int StyleChangeRecord::changeX(int x) {
+	if (stateMoveTo) {
+		return moveDeltaX;
+	}
+	return x;
+}
+
+int StyleChangeRecord::changeY(int y) {
+	if (stateMoveTo) {
+		return moveDeltaY;
+	}
+	return y;
 }
