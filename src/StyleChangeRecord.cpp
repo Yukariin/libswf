@@ -42,7 +42,7 @@ void StyleChangeRecord::readData(DataStream *ds, int fillBits, int lineBits, int
 	}
 	if (stateNewStyles) {
 		fillStyles = FILLSTYLEARRAY(ds, shapeNum);
-		//lineStyles = ds->readLINESTYLEARRAY(ds, shapeNum);
+		lineStyles = LINESTYLEARRAY(ds, shapeNum);
 
 		numFillBits = (int) ds->readUB(4);
 		numLineBits = (int) ds->readUB(4);

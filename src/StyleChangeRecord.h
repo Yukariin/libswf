@@ -4,6 +4,7 @@
 
 #include "SHAPERECORD.h"
 #include "FILLSTYLEARRAY.h"
+#include "LINESTYLEARRAY.h"
 
 class StyleChangeRecord : public SHAPERECORD {
 public:
@@ -20,7 +21,7 @@ public:
 	int fillStyle1;
 	int lineStyle;
 	FILLSTYLEARRAY fillStyles;
-	//LINESTYLEARRAY lineStyles;
+	LINESTYLEARRAY lineStyles;
 	int numFillBits;
 	int numLineBits;
 
