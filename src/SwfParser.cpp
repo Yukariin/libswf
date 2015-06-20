@@ -13,6 +13,7 @@
 #include "DoABCDefineTag.h"
 #include "ShowFrameTag.h"
 #include "TagStub.h"
+#include "UnknownTag.h"
 
 
 SwfParser::SwfParser() {
@@ -87,9 +88,7 @@ void SwfParser::readFromRawData(uint8_t *data, size_t dataLength)
 
 Tag* SwfParser::readTag() {
 	uint16_t tagIdAndLength = ds->readUI16();
-	uint16_t tagId = tagIdAndLength >> 6;  // Upper 10 bits: tag ID
-
-	cout << "Tag ID is: " << (int)tagId << endl;
+	uint16_t tagId = tagIdAndLength >> 6;
 
 	uint32_t tagLength = (uint32_t) tagIdAndLength & 0x3F;
 	if (tagLength == 0x3F) {
@@ -97,8 +96,6 @@ Tag* SwfParser::readTag() {
 	}
 	if (tagLength > ds->available())
 		tagLength = (uint32_t) ds->available();
-
-	cout << "Tag length is: " << (int)tagLength << endl;
 
 	Tag *ret = new TagStub(tagId, "UnresolvedTag");
 
@@ -127,6 +124,9 @@ Tag* SwfParser::readTag() {
 		case 88:
 			ret = new DefineFontNameTag(ds);
 			break;
+		default:
+			ret = new UnknownTag(tagId);
+			ds->skipBytes(tagLength);
 	}
 
 	return ret;
@@ -137,7 +137,7 @@ void SwfParser::readTagList() {
 	Tag *t;
 	do {
 		t = readTag();
-		if (t->id)
-			tagList.insert(tagList.end(), t);
+		cout << t->getName() << endl;
+		tagList.insert(tagList.end(), t);
 	} while (!dynamic_cast<EndTag*>(t) && ds->available() > 0);
 }
