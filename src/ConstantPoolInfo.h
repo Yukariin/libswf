@@ -4,12 +4,22 @@
 
 #include <vector>
 #include <stdint.h>
+#include <string>
+#include "NamespaceInfo.h"
+#include "NamespaceSetInfo.h"
+#include "MultinameInfo.h"
+
+using namespace std;
 
 class ConstantPoolInfo {
 public:
-	std::vector<int32_t> constant_int;
-	std::vector<uint32_t> constant_uint;
-	std::vector<double> constant_double;
+	vector<int32_t> constant_int;
+	vector<uint32_t> constant_uint;
+	vector<double> constant_double;
+	vector<string> constant_string;
+	vector<NamespaceInfo> constant_namespace;
+	vector<NamespaceSetInfo> constant_ns_set;
+	vector<MultinameInfo> constant_multiname;
 
 	ConstantPoolInfo();
 

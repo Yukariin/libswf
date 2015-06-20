@@ -1,0 +1,10 @@
+#ifndef LIBSWF_NAMESPACESETINFO_H
+#define LIBSWF_NAMESPACESETINFO_H
+
+
+class NamespaceSetInfo {
+
+};
+
+
+#endif //LIBSWF_NAMESPACESETINFO_H
