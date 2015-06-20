@@ -6,7 +6,7 @@
 
 class DefineFontNameTag : public Tag {
 public:
-	uint16_t id = 88;
+	static const uint16_t ID = 88;
 
 	uint16_t fontId;
 	string fontName;

@@ -11,17 +11,17 @@ using namespace std;
 
 class DefineSceneAndFrameLabelDataTag : public Tag {
 public:
-	uint16_t id = 86;
+	static const uint16_t ID = 86;
 
-    vector<uint32_t> sceneOffsets;
-    vector<string> sceneNames;
+	vector<uint32_t> sceneOffsets;
+	vector<string> sceneNames;
 
-    vector<uint32_t> frameNums;
-    vector<string> frameNames;
+	vector<uint32_t> frameNums;
+	vector<string> frameNames;
 
-    DefineSceneAndFrameLabelDataTag(DataStream* ds);
+	DefineSceneAndFrameLabelDataTag(DataStream* ds);
 
-    void readData(DataStream* ds);
+	void readData(DataStream* ds);
 };
 
 

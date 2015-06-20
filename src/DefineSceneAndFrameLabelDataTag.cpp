@@ -1,6 +1,6 @@
 #include "DefineSceneAndFrameLabelDataTag.h"
 
-DefineSceneAndFrameLabelDataTag::DefineSceneAndFrameLabelDataTag(DataStream *ds) {
+DefineSceneAndFrameLabelDataTag::DefineSceneAndFrameLabelDataTag(DataStream *ds) : Tag(ID, "DefineSceneAndFrameLabelData") {
     readData(ds);
 }
 

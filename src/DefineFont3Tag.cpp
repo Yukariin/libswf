@@ -1,7 +1,8 @@
 #include <iostream>
+
 #include "DefineFont3Tag.h"
 
-DefineFont3Tag::DefineFont3Tag(DataStream *ds) {
+DefineFont3Tag::DefineFont3Tag(DataStream *ds) : Tag(ID, "DefineFont3"){
 	readData(ds);
 }
 

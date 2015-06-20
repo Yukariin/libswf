@@ -1,7 +1,3 @@
-//
-// Created by yukarin on 6/5/15.
-//
-
 #ifndef LIBSWF_SETBACKGROUNDCOLORTAG_H
 #define LIBSWF_SETBACKGROUNDCOLORTAG_H
 
@@ -11,12 +7,13 @@
 
 class SetBackgroundColorTag : public Tag {
 public:
-	uint16_t id = 9;
+	static const uint16_t ID = 9;
 
 	RGB backgroundColor;
 
-    SetBackgroundColorTag(DataStream* ds);
-    void readData(DataStream* ds);
+	SetBackgroundColorTag(DataStream* ds);
+
+	void readData(DataStream* ds);
 };
 
 

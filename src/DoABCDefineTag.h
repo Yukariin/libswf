@@ -7,7 +7,7 @@
 
 class DoABCDefineTag : public Tag {
 public:
-	uint16_t id = 82;
+	static const uint16_t ID = 82;
 
 	uint32_t flags;
 	string name;

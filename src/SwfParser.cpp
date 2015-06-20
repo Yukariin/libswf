@@ -11,6 +11,8 @@
 #include "EndTag.h"
 #include "DefineFontNameTag.h"
 #include "DoABCDefineTag.h"
+#include "ShowFrameTag.h"
+#include "TagStub.h"
 
 
 SwfParser::SwfParser() {
@@ -84,38 +86,48 @@ void SwfParser::readFromRawData(uint8_t *data, size_t dataLength)
 
 
 Tag* SwfParser::readTag() {
-	Tag *ret = new Tag();
 	uint16_t tagIdAndLength = ds->readUI16();
 	uint16_t tagId = tagIdAndLength >> 6;  // Upper 10 bits: tag ID
-	uint32_t tagLength = (uint32_t) tagIdAndLength & 0x3F;
-	if (ds->available() < tagLength)
-		return ret;
 
 	cout << "Tag ID is: " << (int)tagId << endl;
 
+	uint32_t tagLength = (uint32_t) tagIdAndLength & 0x3F;
 	if (tagLength == 0x3F) {
 		tagLength = ds->readUI32();
-		if (ds->available() < tagLength)
-			return ret;
 	}
+	if (tagLength > ds->available())
+		tagLength = (uint32_t) ds->available();
+
 	cout << "Tag length is: " << (int)tagLength << endl;
 
-	if (tagId == 0)
-		ret = new EndTag(ds);
-	else if (tagId == 9)
-		ret = new SetBackgroundColorTag(ds);
-	else if (tagId == 69)
-		ret = new FileAttributesTag(ds);
-	else if (tagId == 75)
-		ret = new DefineFont3Tag(ds);
-	else if (tagId == 82)
-		ret = new DoABCDefineTag(ds);
-	else if (tagId == 86)
-		ret = new DefineSceneAndFrameLabelDataTag(ds);
-	else if (tagId == 88)
-		ret = new DefineFontNameTag(ds);
-	else
-		ds->skipBytes(tagLength);
+	Tag *ret = new TagStub(tagId, "UnresolvedTag");
+
+	switch (tagId) {
+		case 0:
+			ret = new EndTag(ds);
+			break;
+		case 1:
+			ret = new ShowFrameTag(ds);
+			break;
+		case 9:
+			ret = new SetBackgroundColorTag(ds);
+			break;
+		case 69:
+			ret = new FileAttributesTag(ds);
+			break;
+		case 75:
+			ret = new DefineFont3Tag(ds);
+			break;
+		case 82:
+			ds->skipBytes(tagLength); // ret = new DoABCDefineTag(ds);
+			break;
+		case 86:
+			ret = new DefineSceneAndFrameLabelDataTag(ds);
+			break;
+		case 88:
+			ret = new DefineFontNameTag(ds);
+			break;
+	}
 
 	return ret;
 }

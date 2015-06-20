@@ -1,7 +1,3 @@
-//
-// Created by yukarin on 6/2/15.
-//
-
 #ifndef LIBSWF_FILEATTRIBUTESTAG_H
 #define LIBSWF_FILEATTRIBUTESTAG_H
 
@@ -10,7 +6,7 @@
 
 class FileAttributesTag : public Tag {
 public:
-	uint16_t id = 69;
+	static const uint16_t ID = 69;
 
 	bool reserved1;
 	bool useDirectBlit;
@@ -22,8 +18,8 @@ public:
 	bool useNetwork;
 	int reserved3;
 
-    FileAttributesTag(DataStream* ds);
-    void readData(DataStream* ds);
+	FileAttributesTag(DataStream* ds);
+	void readData(DataStream* ds);
 };
 
 

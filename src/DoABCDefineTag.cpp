@@ -1,6 +1,6 @@
 #include "DoABCDefineTag.h"
 
-DoABCDefineTag::DoABCDefineTag(DataStream *ds) {
+DoABCDefineTag::DoABCDefineTag(DataStream *ds) : Tag(ID, "DoABCDefine"){
 	readData(ds);
 }
 

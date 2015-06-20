@@ -1,10 +1,6 @@
-//
-// Created by yukarin on 6/5/15.
-//
-
 #include "SetBackgroundColorTag.h"
 
-SetBackgroundColorTag::SetBackgroundColorTag(DataStream *ds) {
+SetBackgroundColorTag::SetBackgroundColorTag(DataStream *ds) : Tag(ID, "SetBackgroundColor") {
 	readData(ds);
 }
 

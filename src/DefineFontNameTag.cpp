@@ -1,7 +1,7 @@
 #include <iostream>
 #include "DefineFontNameTag.h"
 
-DefineFontNameTag::DefineFontNameTag(DataStream *ds) {
+DefineFontNameTag::DefineFontNameTag(DataStream *ds) : Tag(ID, "DefineFontName") {
 	readData(ds);
 }
 

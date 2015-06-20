@@ -12,7 +12,7 @@
 
 class DefineFont3Tag : public Tag {
 public:
-	uint16_t id = 75;
+	static const uint16_t ID = 75;
 
 	uint16_t fontId;
 	bool fontFlagsHasLayout;

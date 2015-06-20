@@ -4,8 +4,7 @@
 
 #include "EndTag.h"
 
-EndTag::EndTag(DataStream *ds)
-{
+EndTag::EndTag(DataStream *ds) : Tag(ID, "End") {
     readData(ds);
 }
 

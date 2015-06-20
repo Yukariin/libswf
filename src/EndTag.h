@@ -8,11 +8,11 @@ using namespace std;
 
 class EndTag : public Tag {
 public:
-    uint16_t id = 0;
+	static const uint16_t ID = 0;
 
-    EndTag(DataStream* ds);
+	EndTag(DataStream* ds);
 
-    void readData(DataStream* ds);
+	void readData(DataStream* ds);
 };
 
 
