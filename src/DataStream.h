@@ -27,13 +27,17 @@ public:
 	int8_t readSI8();
 	int16_t readSI16();
 	int32_t readSI32();
-	int64_t readSI64();
+	double readFIXED();
+	float readFIXED8();
+	float readFLOAT16();
+	float readFLOAT();
+	double readDOUBLE();
+	uint32_t readEncodedU32();
 	uint64_t readUB(unsigned nBits);
 	int64_t readSB(unsigned nBits);
-	uint32_t readEncodedU32();
 	string readString();
 	string readString(long len);
-	float readFIXED();
+
 
 	LANGCODE readLANGCODE();
 	SwfCompression readCompression();

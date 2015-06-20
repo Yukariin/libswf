@@ -44,39 +44,62 @@ uint64_t DataStream::readUI64() {
 }
 
 int8_t DataStream::readSI8() {
-	int ret = read();
-	if (ret >= 0x80) {
-		ret = -(((~ret) & 0xFF) + 1);
-	}
-
-	return (int8_t)ret;
+	return (int8_t) read();
 }
 
 int16_t DataStream::readSI16() {
-	int ret = readUI16();
-	if (ret >= 0x8000) {
-		ret = -(((~ret) & 0xFFFF) + 1);
-	}
-
-	return (int16_t)ret;
+	return (int16_t) readUI16();
 }
 
 int32_t DataStream::readSI32() {
-	int ret = readUI32();
-	if (ret >= 0x80000000) {
-		ret = -(((~ret) & 0xFFFFFFFF) + 1);
-	}
-
-	return (int32_t)ret;
+	return (int32_t) readUI32();
 }
 
-int64_t DataStream::readSI64() {
-	int64_t ret = readUI64();
-	if (ret >= 0x8000000000000000) {
-		ret = -(((~ret) & 0xFFFFFFFFFFFFFFFF) + 1);
-	}
+double DataStream::readFIXED() {
+	int afterPoint = readUI16();
+	int beforePoint = readUI16();
+	double ret = ((double) ((beforePoint << 16) + afterPoint)) / 65536;
+	return ret;
+}
 
-	return (int64_t)ret;
+float DataStream::readFIXED8() {
+	int afterPoint = read();
+	int beforePoint = read();
+	float ret = beforePoint + (((float) afterPoint) / 256);
+	return ret;
+}
+
+float DataStream::readFLOAT16() {
+	// TODO: half-precision float reading
+	return 0;
+}
+
+float DataStream::readFLOAT() {
+	uint32_t ret = readUI32();
+	return *((float*) &ret);
+}
+
+double DataStream::readDOUBLE() {
+	uint64_t ret = readUI64();
+	return *((double*) &ret);
+}
+
+uint32_t DataStream::readEncodedU32() {
+	uint32_t ret = read();
+	if (!(ret & 0x00000080))
+		return ret;
+	ret = (ret & 0x0000007F) | (read()) << 7;
+	if(!(ret & 0x00004000))
+		return ret;
+	ret = (ret & 0x00003FFF) | (read()) << 14;
+	if (!(ret & 0x00200000))
+		return ret;
+	ret = (ret & 0x001FFFFF) | (read()) << 21;
+	if (!(ret & 0x10000000))
+		return ret;
+	ret = (ret & 0xFFFFFFFF) | (read()) << 28;
+
+	return ret;
 }
 
 uint64_t DataStream::readUB(unsigned nBits) {
@@ -112,24 +135,6 @@ int64_t DataStream::readSB(unsigned nBits) {
 	return (int64_t)ret;
 }
 
-uint32_t DataStream::readEncodedU32() {
-	uint32_t ret = read();
-	if (!(ret & 0x00000080))
-		return ret;
-	ret = (ret & 0x0000007F) | (read()) << 7;
-	if(!(ret & 0x00004000))
-		return ret;
-	ret = (ret & 0x00003FFF) | (read()) << 14;
-	if (!(ret & 0x00200000))
-		return ret;
-	ret = (ret & 0x001FFFFF) | (read()) << 21;
-	if (!(ret & 0x10000000))
-		return ret;
-	ret = (ret & 0xFFFFFFFF) | (read()) << 28;
-
-	return ret;
-}
-
 string DataStream::readString() {
 	ostringstream ret;
 	uint8_t r;
@@ -149,13 +154,6 @@ string DataStream::readString(long len) {
 	}
 
 	return ret.str();
-}
-
-float DataStream::readFIXED() {
-	int afterPoint = read();
-	int beforePoint = read();
-	float ret = beforePoint + (((float) afterPoint) / 256);
-	return ret;
 }
 
 LANGCODE DataStream::readLANGCODE() {
