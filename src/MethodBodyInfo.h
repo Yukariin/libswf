@@ -1,0 +1,10 @@
+#ifndef LIBSWF_METHODBODYINFO_H
+#define LIBSWF_METHODBODYINFO_H
+
+
+class MethodBodyInfo {
+
+};
+
+
+#endif //LIBSWF_METHODBODYINFO_H
