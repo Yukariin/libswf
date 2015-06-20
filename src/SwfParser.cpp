@@ -14,6 +14,7 @@
 #include "ShowFrameTag.h"
 #include "TagStub.h"
 #include "UnknownTag.h"
+#include "SymbolClassTag.h"
 
 
 SwfParser::SwfParser() {
@@ -97,37 +98,50 @@ Tag* SwfParser::readTag() {
 	if (tagLength > ds->available())
 		tagLength = (uint32_t) ds->available();
 
-	Tag *ret = new TagStub(tagId, "UnresolvedTag");
+	uint8_t *tagData = ds->readBytes(tagLength);
+	DataStream *tagDataStream = new DataStream(tagData, tagLength);
+	delete tagData; // delete tagData because this already copied into tagDataStream
 
-	switch (tagId) {
+	TagStub *ret = new TagStub(tagId, "UnresolvedTag", tagDataStream);
+
+
+	return resolveTag(ret);
+}
+
+Tag* SwfParser::resolveTag(TagStub *t) {
+	Tag *ret;
+	switch (t->getId()) {
 		case 0:
-			ret = new EndTag(ds);
+			ret = new EndTag(t->tagDataStream);
 			break;
 		case 1:
-			ret = new ShowFrameTag(ds);
+			ret = new ShowFrameTag(t->tagDataStream);
 			break;
 		case 9:
-			ret = new SetBackgroundColorTag(ds);
+			ret = new SetBackgroundColorTag(t->tagDataStream);
 			break;
 		case 69:
-			ret = new FileAttributesTag(ds);
+			ret = new FileAttributesTag(t->tagDataStream);
 			break;
 		case 75:
-			ret = new DefineFont3Tag(ds);
+			ret = new DefineFont3Tag(t->tagDataStream);
+			break;
+		case 76:
+			ret = new SymbolClassTag(t->tagDataStream);
 			break;
 		case 82:
-			ds->skipBytes(tagLength); // ret = new DoABCDefineTag(ds);
+			ret = new DoABCDefineTag(t->tagDataStream);
 			break;
 		case 86:
-			ret = new DefineSceneAndFrameLabelDataTag(ds);
+			ret = new DefineSceneAndFrameLabelDataTag(t->tagDataStream);
 			break;
 		case 88:
-			ret = new DefineFontNameTag(ds);
+			ret = new DefineFontNameTag(t->tagDataStream);
 			break;
 		default:
-			ret = new UnknownTag(tagId);
-			ds->skipBytes(tagLength);
+			ret = new UnknownTag(t->getId());
 	}
+	delete t;
 
 	return ret;
 }
@@ -135,9 +149,12 @@ Tag* SwfParser::readTag() {
 void SwfParser::readTagList() {
 	vector<Tag*> tagList;
 	Tag *t;
-	do {
+	while (ds->available() > 0) {
 		t = readTag();
+		if (t == NULL)
+			break;
 		cout << t->getName() << endl;
 		tagList.insert(tagList.end(), t);
-	} while (!dynamic_cast<EndTag*>(t) && ds->available() > 0);
+	};
 }
+

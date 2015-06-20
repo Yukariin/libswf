@@ -10,6 +10,7 @@
 #include "RECT.h"
 #include "Tag.h"
 #include "RGB.h"
+#include "TagStub.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ public:
 	void readFromFile(const char* fileName);
 	void readFromRawData(uint8_t* data, size_t dataLength);
 	Tag* readTag();
+	Tag* resolveTag(TagStub* t);
 	void readTagList();
 
 private:

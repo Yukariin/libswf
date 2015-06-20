@@ -6,7 +6,10 @@
 
 class TagStub : public Tag {
 public:
-	TagStub(uint16_t tagId, string tagName);
+	DataStream *tagDataStream;
+
+	TagStub(uint16_t tagId, string tagName, DataStream* tagDataStream);
+	~TagStub();
 
 	void readData(DataStream* ds);
 };
