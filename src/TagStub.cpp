@@ -11,3 +11,6 @@ TagStub::~TagStub() {
 void TagStub::readData(DataStream *ds) {
 }
 
+DataStream *TagStub::getDataStream() {
+	return tagDataStream;
+}

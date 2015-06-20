@@ -23,7 +23,7 @@ public:
 	void readFromFile(const char* fileName);
 	void readFromRawData(uint8_t* data, size_t dataLength);
 	Tag* readTag();
-	Tag* resolveTag(TagStub* t);
+	static Tag* resolveTag(TagStub* t);
 	void readTagList();
 
 private:

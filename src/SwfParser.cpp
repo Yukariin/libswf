@@ -38,8 +38,6 @@ void SwfParser::readFromFile(const char *fileName)
 		size_t length = (size_t) inputFile.tellg();
 		inputFile.seekg (0, inputFile.beg);
 
-		cout << length << endl;
-
 		uint8_t data[length];
 		inputFile.read((char*)&data, length);
 
@@ -111,31 +109,31 @@ Tag* SwfParser::resolveTag(TagStub *t) {
 	Tag *ret;
 	switch (t->getId()) {
 		case 0:
-			ret = new EndTag(t->tagDataStream);
+			ret = new EndTag(t->getDataStream());
 			break;
 		case 1:
-			ret = new ShowFrameTag(t->tagDataStream);
+			ret = new ShowFrameTag(t->getDataStream());
 			break;
 		case 9:
-			ret = new SetBackgroundColorTag(t->tagDataStream);
+			ret = new SetBackgroundColorTag(t->getDataStream());
 			break;
 		case 69:
-			ret = new FileAttributesTag(t->tagDataStream);
+			ret = new FileAttributesTag(t->getDataStream());
 			break;
 		case 75:
-			ret = new DefineFont3Tag(t->tagDataStream);
+			ret = new DefineFont3Tag(t->getDataStream());
 			break;
 		case 76:
-			ret = new SymbolClassTag(t->tagDataStream);
+			ret = new SymbolClassTag(t->getDataStream());
 			break;
 		case 82:
-			ret = new DoABCDefineTag(t->tagDataStream);
+			ret = new DoABCDefineTag(t->getDataStream());
 			break;
 		case 86:
-			ret = new DefineSceneAndFrameLabelDataTag(t->tagDataStream);
+			ret = new DefineSceneAndFrameLabelDataTag(t->getDataStream());
 			break;
 		case 88:
-			ret = new DefineFontNameTag(t->tagDataStream);
+			ret = new DefineFontNameTag(t->getDataStream());
 			break;
 		default:
 			ret = new UnknownTag(t->getId());
