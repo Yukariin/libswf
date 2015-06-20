@@ -23,7 +23,7 @@ DataStream::DataStream(uint8_t *data, size_t dataLength) {
 
 DataStream::~DataStream()
 {
-	delete data;
+	delete [] data;
 }
 
 uint8_t DataStream::readUI8() {

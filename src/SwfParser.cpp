@@ -12,7 +12,6 @@
 #include "DefineFontNameTag.h"
 #include "DoABCDefineTag.h"
 #include "ShowFrameTag.h"
-#include "TagStub.h"
 #include "UnknownTag.h"
 #include "SymbolClassTag.h"
 
@@ -100,7 +99,7 @@ Tag* SwfParser::readTag() {
 
 	uint8_t *tagData = ds->readBytes(tagLength);
 	DataStream *tagDataStream = new DataStream(tagData, tagLength);
-	delete tagData; // delete tagData because this already copied into tagDataStream
+	delete [] tagData;
 
 	TagStub *ret = new TagStub(tagId, "UnresolvedTag", tagDataStream);
 
