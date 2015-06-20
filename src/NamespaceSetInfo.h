@@ -2,8 +2,19 @@
 #define LIBSWF_NAMESPACESETINFO_H
 
 
-class NamespaceSetInfo {
+#include <vector>
+#include <stdint.h>
 
+using namespace std;
+
+class NamespaceSetInfo {
+public:
+	vector<uint32_t> ns;
+
+	NamespaceSetInfo();
+	NamespaceSetInfo(vector<uint32_t> ns);
+
+	void readData();
 };
 
 
