@@ -71,7 +71,7 @@ void SwfParser::readFromRawData(vector<uint8_t> data) {
 	ds = new DataStream(uncompressedData);
 
 	swf->frameSize = RECT(ds);
-	ds->readUI8();  // Skip first byte of frameRate because this looks like big-endian instead little
+	ds->skipBytes(1);  // Skip first byte of frameRate because this looks like big-endian instead little
 	swf->frameRate = ds->readUI8();
 	swf->frameCount = ds->readUI16();
 

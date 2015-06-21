@@ -5,6 +5,7 @@
 #include <vector>
 #include <stdint.h>
 #include <string>
+
 #include "NamespaceInfo.h"
 #include "NamespaceSetInfo.h"
 #include "MultinameInfo.h"
