@@ -12,5 +12,5 @@ void FOCALGRADIENT::readData(DataStream *ds, int shapeNum) {
 	for (int i = 0; i < numGradients; i++) {
 		gradientRecords.push_back(GRADRECORD(ds, shapeNum));
 	}
-	focalPoint = ds->readFIXED();
+	focalPoint = ds->readFIXED8();
 }
