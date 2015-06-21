@@ -7,6 +7,7 @@
 #include "StyleChangeRecord.h"
 #include "StraightEdgeRecord.h"
 #include "CurvedEdgeRecord.h"
+#include "SwfBaseTypes.h"
 
 DataStream::DataStream() {
 	index = 0;
@@ -58,10 +59,10 @@ int32_t DataStream::readSI32() {
 	return (int32_t) readUI32();
 }
 
-double DataStream::readFIXED() {
+float DataStream::readFIXED() {
 	int afterPoint = readUI16();
 	int beforePoint = readUI16();
-	double ret = ((double) ((beforePoint << 16) + afterPoint)) / 65536;
+	float ret = ((float) ((beforePoint << 16) + afterPoint)) / 65536;
 	return ret;
 }
 
@@ -73,8 +74,8 @@ float DataStream::readFIXED8() {
 }
 
 float DataStream::readFLOAT16() {
-	// TODO: half-precision float reading
-	return 0;
+	uint16_t t = readUI16();
+	return Float16Compressor::decompress(t);
 }
 
 float DataStream::readFLOAT() {

@@ -28,7 +28,7 @@ public:
 	int8_t readSI8();
 	int16_t readSI16();
 	int32_t readSI32();
-	double readFIXED();
+	float readFIXED();
 	float readFIXED8();
 	float readFLOAT16();
 	float readFLOAT();
