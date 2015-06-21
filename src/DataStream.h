@@ -15,9 +15,10 @@ using namespace std;
 
 class DataStream {
 public:
+	DataStream();
 	DataStream(DataStream* ds);
+	DataStream(vector<uint8_t> data);
 	DataStream(uint8_t* data, size_t dataLength);
-	~DataStream();
 
 	// Read base types
 	uint8_t readUI8();
@@ -38,26 +39,30 @@ public:
 	string readString();
 	string readString(long len);
 
-
 	LANGCODE readLANGCODE();
 	SwfCompression readCompression();
-
 	SHAPERECORD* readSHAPERECORD(int fillBits, int lineBits, int shapeNum);
 	vector<SHAPERECORD*> readSHAPERECORDS(int fillBits, int lineBits, int shapeNum);
 
 	// Base read methods
-	uint8_t* readBytes(long len);
-	void alignByte();
-	long available();
 	uint8_t read();
 	int readNoBitReset();
+	vector<uint8_t> readBytes(long len);
+
+	//Base write methods
+	//void write(uint8_t);
+
+	// Base data stream methods
+	void alignByte();
+	long available();
 	void skipBytes(long count);
 	long getIndex();
 	void seek(long index);
 
 private:
-	uint8_t *data;
-	size_t dataLength;
+	vector<uint8_t> data;
+	// uint8_t *data;
+	//size_t dataLength;
 	long index = 0;
 	int bitIndex = 0;
 	int tempByte = 0;

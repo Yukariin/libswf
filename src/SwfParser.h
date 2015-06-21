@@ -21,6 +21,7 @@ public:
 	~SwfParser();
 
 	void readFromFile(const char* fileName);
+	void readFromRawData(vector<uint8_t> data);
 	void readFromRawData(uint8_t* data, size_t dataLength);
 	Tag* readTag();
 	static Tag* resolveTag(TagStub* t);

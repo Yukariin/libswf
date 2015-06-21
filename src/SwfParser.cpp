@@ -1,7 +1,9 @@
 #include <iostream>
+#include <iterator>
 #include <fstream>
 #include <vector>
 #include <zlib.h>
+#include <assert.h>
 
 #include "SwfParser.h"
 #include "FileAttributesTag.h"
@@ -14,6 +16,7 @@
 #include "ShowFrameTag.h"
 #include "UnknownTag.h"
 #include "SymbolClassTag.h"
+#include "DefineFontAlignZonesTag.h"
 
 
 SwfParser::SwfParser() {
@@ -33,18 +36,46 @@ void SwfParser::readFromFile(const char *fileName)
 {
 	if (fileName) {
 		ifstream inputFile (fileName, ios::binary);
+		assert(inputFile);
+		inputFile.unsetf(ios::skipws);
 
-		inputFile.seekg (0, inputFile.end);
-		size_t length = (size_t) inputFile.tellg();
-		inputFile.seekg (0, inputFile.beg);
+		istream_iterator<uint8_t> b(inputFile), e;
+		const vector<uint8_t> data(b, e);
 
-		uint8_t data[length];
-		inputFile.read((char*)&data, length);
-
-		inputFile.close();
-
-		readFromRawData(data, length);
+		readFromRawData(data);
 	}
+}
+
+void SwfParser::readFromRawData(vector<uint8_t> data) {
+	if (data.size() < 8) {
+		return;
+	}
+
+	// Read uncompressed header
+	ds = new DataStream(data);
+	swf->compression = ds->readCompression();
+	swf->version = ds->readUI8();
+	swf->fileLength = ds->readUI32();
+
+	vector<uint8_t> compressedData = ds->readBytes(data.size() - 8);
+	unsigned long uncompressedDataSize = (swf->fileLength - 8);
+	vector<uint8_t> uncompressedData(uncompressedDataSize);
+
+	if (swf->compression == SwfCompression::ZLIB) {
+		int err = uncompress(uncompressedData.data(), &uncompressedDataSize, compressedData.data(), compressedData.size());
+		if (err != Z_OK) {
+			cerr << err << endl;
+			exit(1);
+		}
+	}
+	ds = new DataStream(uncompressedData);
+
+	swf->frameSize = RECT(ds);
+	ds->readUI8();  // Skip first byte of frameRate because this looks like big-endian instead little
+	swf->frameRate = ds->readUI8();
+	swf->frameCount = ds->readUI16();
+
+	readTagList();
 }
 
 void SwfParser::readFromRawData(uint8_t *data, size_t dataLength)
@@ -53,33 +84,7 @@ void SwfParser::readFromRawData(uint8_t *data, size_t dataLength)
 		return;
 	}
 
-	// Create buffer for header and copy header
-	uint8_t header [8];
-	copy(data, data + 8, header);
-	ds = new DataStream(header, sizeof(header));
-
-	swf->compression = ds->readCompression();
-	swf->version = ds->readUI8();
-	swf->fileLength = ds->readUI32();
-
-	unsigned long bodySize = (swf->fileLength - 8);
-	uint8_t body [bodySize];
-
-	if (swf->compression == SwfCompression::NONE) {
-		copy(data + 8, data + dataLength, body);
-	}
-	else if (swf->compression == SwfCompression::ZLIB) {
-		unsigned long compressedDataSize = (dataLength - 8);
-		uncompress(body, &bodySize, data + 8, compressedDataSize);
-	}
-	ds = new DataStream(body, sizeof(body));
-
-	swf->frameSize = RECT(ds);
-	ds->readUI8();  // Skip first byte of frameRate because this looks like big-endian instead little
-	swf->frameRate = ds->readUI8();
-	swf->frameCount = ds->readUI16();
-
-	readTagList();
+	readFromRawData(vector<uint8_t>(data, data + dataLength));
 }
 
 
@@ -95,10 +100,7 @@ Tag* SwfParser::readTag() {
 	if (tagLength > ds->available())
 		tagLength = (uint32_t) ds->available();
 
-	uint8_t *tagData = ds->readBytes(tagLength);
-	DataStream *tagDataStream = new DataStream(tagData, tagLength);
-	delete [] tagData;
-
+	DataStream *tagDataStream = new DataStream(ds->readBytes(tagLength));
 	TagStub *ret = new TagStub(tagId, "UnresolvedTag", tagDataStream);
 
 
@@ -119,6 +121,9 @@ Tag* SwfParser::resolveTag(TagStub *t) {
 			break;
 		case 69:
 			ret = new FileAttributesTag(t->getDataStream());
+			break;
+		case 73:
+			ret = new DefineFontAlignZonesTag(t->getDataStream());
 			break;
 		case 75:
 			ret = new DefineFont3Tag(t->getDataStream());
@@ -154,4 +159,3 @@ void SwfParser::readTagList() {
 		tagList.insert(tagList.end(), t);
 	};
 }
-

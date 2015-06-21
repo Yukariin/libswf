@@ -8,22 +8,25 @@
 #include "StraightEdgeRecord.h"
 #include "CurvedEdgeRecord.h"
 
-DataStream::DataStream(DataStream *ds) {
-	DataStream(ds->data, ds->dataLength);
-}
-
-DataStream::DataStream(uint8_t *data, size_t dataLength) {
-	this->data = new uint8_t [dataLength];
-	this->dataLength = dataLength;
+DataStream::DataStream() {
 	index = 0;
 	bitIndex = 0;
 	tempByte = 0;
-	copy(data, data + dataLength, this->data);
 }
 
-DataStream::~DataStream()
-{
-	delete [] data;
+DataStream::DataStream(DataStream *ds) {
+	DataStream(ds->data);
+}
+
+DataStream::DataStream(vector<uint8_t> data) {
+	this->data = data;
+}
+
+DataStream::DataStream(uint8_t *data, size_t dataLength) {
+	this->data = vector<uint8_t>(data, data + dataLength);
+	index = 0;
+	bitIndex = 0;
+	tempByte = 0;
 }
 
 uint8_t DataStream::readUI8() {
@@ -210,13 +213,14 @@ vector<SHAPERECORD*> DataStream::readSHAPERECORDS(int fillBits, int lineBits, in
 	return ret;
 }
 
-uint8_t* DataStream::readBytes(long len) {
-	if (len <= 0)
-		return 0;
+vector<uint8_t> DataStream::readBytes(long len) {
+	vector<uint8_t> ret;
 
-	uint8_t *ret = new uint8_t [len];
+	if (len <= 0)
+		return ret;
+
 	bitIndex = 0;
-	copy(data + index, data + index + len, ret);
+	ret = vector<uint8_t>(data.begin() + index, data.begin() + index + len);
 	index += len;
 
 	return ret;
@@ -230,7 +234,11 @@ uint8_t DataStream::read() {
 }
 
 void DataStream::alignByte() {
-	bitIndex = 0;
+	if (bitIndex > 0) {
+		bitIndex = 0;
+		// write tempByte?
+		tempByte = 0;
+	}
 }
 
 int DataStream::readNoBitReset() {
@@ -240,7 +248,7 @@ int DataStream::readNoBitReset() {
 }
 
 long DataStream::available() {
-	return (dataLength - index);
+	return (data.size() - index);
 }
 
 void DataStream::skipBytes(long count) {
