@@ -132,42 +132,43 @@ Tag* SwfParser::readTag() {
 	DataStream *tagDataStream = new DataStream(ds->readBytes(tagLength));
 	TagStub *ret = new TagStub(tagId, "UnresolvedTag", tagDataStream);
 
-
 	return resolveTag(ret);
 }
 
 Tag* SwfParser::resolveTag(TagStub *t) {
 	Tag *ret;
+
+	DataStream *tds = t->getDataStream();
 	switch (t->getId()) {
 		case 0:
-			ret = new EndTag(t->getDataStream());
+			ret = new EndTag(tds);
 			break;
 		case 1:
-			ret = new ShowFrameTag(t->getDataStream());
+			ret = new ShowFrameTag(tds);
 			break;
 		case 9:
-			ret = new SetBackgroundColorTag(t->getDataStream());
+			ret = new SetBackgroundColorTag(tds);
 			break;
 		case 69:
-			ret = new FileAttributesTag(t->getDataStream());
+			ret = new FileAttributesTag(tds);
 			break;
 		case 73:
-			ret = new DefineFontAlignZonesTag(t->getDataStream());
+			ret = new DefineFontAlignZonesTag(tds);
 			break;
 		case 75:
-			ret = new DefineFont3Tag(t->getDataStream());
+			ret = new DefineFont3Tag(tds);
 			break;
 		case 76:
-			ret = new SymbolClassTag(t->getDataStream());
+			ret = new SymbolClassTag(tds);
 			break;
 		case 82:
-			ret = new DoABCDefineTag(t->getDataStream());
+			ret = new DoABCDefineTag(tds);
 			break;
 		case 86:
-			ret = new DefineSceneAndFrameLabelDataTag(t->getDataStream());
+			ret = new DefineSceneAndFrameLabelDataTag(tds);
 			break;
 		case 88:
-			ret = new DefineFontNameTag(t->getDataStream());
+			ret = new DefineFontNameTag(tds);
 			break;
 		default:
 			ret = new UnknownTag(t->getId());
