@@ -9,6 +9,7 @@
 #include "SwfCompression.h"
 #include "SwfBaseTypes.h"
 #include "RECT.h"
+#include "TagStub.h"
 
 using namespace std;
 
@@ -60,7 +61,15 @@ public:
 	/*
 	 * SWF from file
 	 */
-    //Swf(const char *fileName);
+	Swf(vector<uint8_t > in);
+
+	//void saveTo();
+
+private:
+	static void decompress(vector<uint8_t > in, vector<uint8_t>& out);
+	Tag* readTag(DataStream* ds);
+	static Tag* resolveTag(TagStub* t);
+	void readTagList(DataStream* ds);
 };
 
 
