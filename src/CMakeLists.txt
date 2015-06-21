@@ -18,5 +18,5 @@ if ( ZLIB_FOUND )
     target_link_libraries( swf ${ZLIB_LIBRARIES} )
 endif( ZLIB_FOUND )
 
-add_executable(swft main.cpp)
-target_link_libraries(swft swf)
+add_executable(swfparser main.cpp)
+target_link_libraries(swfparser swf)

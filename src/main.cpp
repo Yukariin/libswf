@@ -3,9 +3,11 @@
 
 using namespace std;
 
-int main() {
-	SwfParser p;
-	p.readFromFile("/home/yukarin/Yukariin.github.io/font/font.swf");
+int main(int argc, char* argv[]) {
+	if (argc > 1) {
+		SwfParser p;
+		p.readFromFile(argv[1]);
+	}
 
 	return 0;
 }
