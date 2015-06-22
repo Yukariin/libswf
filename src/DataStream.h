@@ -10,7 +10,8 @@
 #include "LANGCODE.h"
 #include "SwfCompression.h"
 #include "SHAPERECORD.h"
-#include "Tag.h"
+
+class Tag;
 
 using namespace std;
 
