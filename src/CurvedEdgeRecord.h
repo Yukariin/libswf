@@ -2,7 +2,7 @@
 #define LIBSWF_CURVEDEDGERECORD_H
 
 
-#include "DataStream.h"
+#include "SHAPERECORD.h"
 
 class CurvedEdgeRecord : public SHAPERECORD {
 public:

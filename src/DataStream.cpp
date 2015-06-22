@@ -8,7 +8,17 @@
 #include "StraightEdgeRecord.h"
 #include "CurvedEdgeRecord.h"
 #include "SwfBaseTypes.h"
-#include "TagStub.h"
+#include "EndTag.h"
+#include "ShowFrameTag.h"
+#include "SetBackgroundColorTag.h"
+#include "FileAttributesTag.h"
+#include "DefineFontAlignZonesTag.h"
+#include "DefineFont3Tag.h"
+#include "SymbolClassTag.h"
+#include "DoABCDefineTag.h"
+#include "DefineSceneAndFrameLabelDataTag.h"
+#include "DefineFontNameTag.h"
+#include "UnknownTag.h"
 
 DataStream::DataStream() {
 	index = 0;
@@ -229,8 +239,63 @@ Tag* DataStream::readTag() {
 	DataStream *tagDataStream = new DataStream(readBytes(tagLength));
 	TagStub *ret = new TagStub(tagId, "UnresolvedTag", tagDataStream);
 
-	//return resolveTag(ret);
+	return resolveTag(ret);
+	//return ret;
+}
+
+Tag* DataStream::resolveTag(TagStub *t) {
+	Tag *ret;
+
+	DataStream *tds = t->getDataStream();
+	switch (t->getId()) {
+		case 0:
+			ret = new EndTag(tds);
+			break;
+		case 1:
+			ret = new ShowFrameTag(tds);
+			break;
+		case 9:
+			ret = new SetBackgroundColorTag(tds);
+			break;
+		case 69:
+			ret = new FileAttributesTag(tds);
+			break;
+		case 73:
+			ret = new DefineFontAlignZonesTag(tds);
+			break;
+		case 75:
+			ret = new DefineFont3Tag(tds);
+			break;
+		case 76:
+			ret = new SymbolClassTag(tds);
+			break;
+		case 82:
+			ret = new DoABCDefineTag(tds);
+			break;
+		case 86:
+			ret = new DefineSceneAndFrameLabelDataTag(tds);
+			break;
+		case 88:
+			ret = new DefineFontNameTag(tds);
+			break;
+		default:
+			ret = new UnknownTag(t->getId());
+	}
+	delete t;
+
 	return ret;
+}
+
+void DataStream::readTagList() {
+	vector<Tag*> tagList;
+	Tag *t;
+	while (available() > 0) {
+		t = readTag();
+		if (t == NULL)
+			break;
+		cout << t->getName() << endl;
+		tagList.insert(tagList.end(), t);
+	};
 }
 
 vector<uint8_t> DataStream::readBytes(long len) {

@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 
+#include "DataStream.h"
 #include "RGB.h"
 #include "MATRIX.h"
 #include "GRADIENT.h"

@@ -3,6 +3,7 @@
 
 
 #include <stdint.h>
+
 #include "DataStream.h"
 
 class RGB {

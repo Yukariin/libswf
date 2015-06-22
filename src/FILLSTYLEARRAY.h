@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "FILLSTYLE.h"
+#include "DataStream.h"
 
 class FILLSTYLEARRAY {
 public:

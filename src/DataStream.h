@@ -9,9 +9,10 @@
 
 #include "LANGCODE.h"
 #include "SwfCompression.h"
-#include "SHAPERECORD.h"
+#include "TagStub.h"
 
 class Tag;
+class SHAPERECORD;
 
 using namespace std;
 
@@ -46,6 +47,8 @@ public:
 	SHAPERECORD* readSHAPERECORD(int fillBits, int lineBits, int shapeNum);
 	vector<SHAPERECORD*> readSHAPERECORDS(int fillBits, int lineBits, int shapeNum);
 	Tag* readTag();
+	static Tag* resolveTag(TagStub* t);
+	void readTagList();
 
 	// Base read methods
 	uint8_t read();
