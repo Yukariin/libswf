@@ -5,9 +5,9 @@
 #include <stdint.h>
 #include <string>
 
-#include "DataStream.h"
-
 using namespace std;
+
+class DataStream;
 
 class Tag {
 public:

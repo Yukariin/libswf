@@ -8,6 +8,7 @@
 #include "StraightEdgeRecord.h"
 #include "CurvedEdgeRecord.h"
 #include "SwfBaseTypes.h"
+#include "TagStub.h"
 
 DataStream::DataStream() {
 	index = 0;
@@ -211,6 +212,24 @@ vector<SHAPERECORD*> DataStream::readSHAPERECORDS(int fillBits, int lineBits, in
 	} while (!dynamic_cast<EndShapeRecord*>(rec));
 	alignByte();
 
+	return ret;
+}
+
+Tag* DataStream::readTag() {
+	uint16_t tagIdAndLength = readUI16();
+	uint16_t tagId = tagIdAndLength >> 6;
+
+	uint32_t tagLength = (uint32_t) tagIdAndLength & 0x3F;
+	if (tagLength == 0x3F) {
+		tagLength = readUI32();
+	}
+	if (tagLength > available())
+		tagLength = (uint32_t) available();
+
+	DataStream *tagDataStream = new DataStream(readBytes(tagLength));
+	TagStub *ret = new TagStub(tagId, "UnresolvedTag", tagDataStream);
+
+	//return resolveTag(ret);
 	return ret;
 }
 

@@ -10,6 +10,7 @@
 #include "LANGCODE.h"
 #include "SwfCompression.h"
 #include "SHAPERECORD.h"
+#include "Tag.h"
 
 using namespace std;
 
@@ -43,6 +44,7 @@ public:
 	SwfCompression readCompression();
 	SHAPERECORD* readSHAPERECORD(int fillBits, int lineBits, int shapeNum);
 	vector<SHAPERECORD*> readSHAPERECORDS(int fillBits, int lineBits, int shapeNum);
+	Tag* readTag();
 
 	// Base read methods
 	uint8_t read();
