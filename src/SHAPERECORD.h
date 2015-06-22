@@ -8,8 +8,8 @@ class SHAPERECORD {
 public:
 	virtual void readData(DataStream* ds) = 0;
 
-	virtual int changeX(int x);
-	virtual int changeY(int y);
+	virtual int changeX(int x) = 0;
+	virtual int changeY(int y) = 0;
 };
 
 
