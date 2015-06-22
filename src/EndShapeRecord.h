@@ -5,7 +5,8 @@
 #include "SHAPERECORD.h"
 
 class EndShapeRecord : public SHAPERECORD {
-
+public:
+	void readData(DataStream* ds);
 };
 
 

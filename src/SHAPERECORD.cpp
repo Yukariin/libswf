@@ -7,6 +7,3 @@ int SHAPERECORD::changeX(int x) {
 int SHAPERECORD::changeY(int y) {
 	return 0;
 }
-
-void SHAPERECORD::readData(DataStream *ds) {
-}

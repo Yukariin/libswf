@@ -6,7 +6,7 @@
 
 class SHAPERECORD {
 public:
-	virtual void readData(DataStream* ds);
+	virtual void readData(DataStream* ds) = 0;
 
 	virtual int changeX(int x);
 	virtual int changeY(int y);
